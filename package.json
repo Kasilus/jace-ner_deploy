@@ -1,0 +1,48 @@
+{
+  "name": "jace-ner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gateway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"nodemon gateway.js --exec babel-node --presets babel-preset-env\"  \"node start_lang_servers.js node lang_server.js\"",
+    "start": "concurrently \"node --harmony gateway.js --prod\" \"node start_lang_servers.js node --harmony lang_server.js --prod\"",
+    "lint": "eslint src/js",
+    "postinstall": "node ./build/build.js && node ./build/build_lang_servers.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "languagedetect": "^2.0.0",
+    "lodash": "^4.17.20",
+    "nodemon": "^2.0.4",
+    "python-shell": "^2.0.2",
+    "sentence-extractor": "github:boldak/sentence-extractor",
+    "swagger-ui-express": "^4.1.4",
+    "swagger-ui-themes": "^3.0.1",
+    "xml": "^1.0.1",
+    "xml-js": "^1.6.11",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
+    "concurrently": "^5.3.0",
+    "elegant-spinner": "^2.0.0",
+    "execa": "^4.0.3",
+    "extract-zip": "^2.0.1",
+    "fs-extra": "^9.0.1",
+    "inly": "^4.0.8",
+    "jszip": "^3.5.0",
+    "log-update": "^4.0.0",
+    "split-file": "^2.2.1"
+  }
+}

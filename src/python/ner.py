@@ -1,0 +1,62 @@
+#!/usr/bin/python
+
+import sys, os, json
+
+from mitie import *
+from collections import defaultdict
+
+MITIE_MODELS_PATH = "./MITIE-models/"
+MITIE_MODEL_FILE_SUFFIX = "_model.dat"
+
+if __name__=='__main__':
+    sys.stdin.reconfigure(encoding='utf-8')
+    sys.stdout.reconfigure(encoding='utf-8')
+    lang = sys.argv[1]
+    model_name = MITIE_MODELS_PATH + lang + MITIE_MODEL_FILE_SUFFIX
+    ner = named_entity_extractor(model_name)
+    input_json = None
+    for line in sys.stdin:
+        input_json = json.loads(line)
+        method = input_json['method']
+        output = None
+        if method == 'get_possible_ner_tags':
+            tags = ner.get_possible_ner_tags()
+            output = {"tags": tags}
+        else:
+            text = input_json['params']['text']
+            text = to_bytes(text)
+            if method == 'tokenize':
+                offsets = input_json['params']['offsets']
+                if (offsets != "true"):
+                    output = tokenize(text)
+                    output = [str(x.decode('UTF-8')) for x in output]
+                else:
+                    output = tokenize_with_offsets(text)
+                    output = [(str(x.decode('UTF-8')), y) for (x, y) in output]
+                output = {"tokens": output}
+            elif method == 'extract_entities':
+                tags = input_json['params']['tags']
+                if tags == '':
+                    tags = ner.get_possible_ner_tags()
+                output = []
+                tokens = tokenize(text)
+                entities = ner.extract_entities(tokens)
+                for e in entities:
+                    tag = e[1]
+                    if (tag in tags):
+                        range = e[0]
+                        score = e[2]
+                        score_text = "{:0.3f}".format(score)
+                        entity_text = " ".join(tokens[i].decode() for i in range)
+                        obj = {
+                            "score": score_text,
+                            "tag": tag,
+                            "entity": entity_text,
+                            "range": {
+                                "start": min(range),
+                                "end": max(range)
+                            }
+                        }
+                        output.append(obj)
+                output = {"named_entities": output}
+        print(json.dumps(output, ensure_ascii=False).encode('utf8').decode())
