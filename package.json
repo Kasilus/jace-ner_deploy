@@ -6,10 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"nodemon gateway.js --exec babel-node --presets babel-preset-env\"  \"node start_lang_servers.js node lang_server.js\"",
-    "prestart": "node ./build/build_lang_servers.js",
     "start": "concurrently \"node --harmony gateway.js --prod\" \"node start_lang_servers.js node --harmony lang_server.js --prod\"",
     "lint": "eslint src/js",
-    "postinstall": "node ./build/build.js"
+    "postinstall": "node ./build/build.js && node ./build/build_lang_servers.js"
   },
   "author": "",
   "license": "ISC",
