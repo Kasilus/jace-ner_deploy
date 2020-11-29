@@ -45,7 +45,7 @@ languages.forEach(lang => {
         console.log(`config.js for ${lang} language was created`);
       });
 
-      servers_deploy[config.service.lang] = config.service.host + ':' + config.service.port;
+      servers_deploy[config.service.lang] = process.env.HOST + ':' + process.env.PORT;
       fs.writeFile(path.join(__dirname, '../servers_deploy.json'), JSON.stringify(servers_deploy, null, " "), (err) => {
         if (err) throw err;
         console.log(`servers_deploy.json for ${lang} was filled`);
