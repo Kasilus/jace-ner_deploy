@@ -1,8 +1,8 @@
 module.exports = {
   service : {
-    lang: "en",
-    host: "localhost",
-    port: 4001,
+    lang: "",
+    host: "",
+    port: 0,
   	mode: "development"
   }
 }

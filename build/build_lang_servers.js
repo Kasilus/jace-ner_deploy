@@ -6,8 +6,11 @@ const config = require('../config');
 let servers_deploy = {};
 
 let languages = config.service.languages;
-let host = process.env.HOST;
-let port = process.env.PORT;
+console.log('build_lang_servers.js LANGUAGES = ' + languages);
+let host = config.service.host;
+console.log('build_lang_servers.js HOST = ' + host);
+let port = config.service.port;
+console.log('build_lang_servers.js PORT = ' + port);
 const files = ['lang_routes.js', 'lang_server.js'];
 
 languages.forEach(lang => {
@@ -38,16 +41,19 @@ languages.forEach(lang => {
       if (err) throw err;
       console.log(`${src} was copied to ${dest}`);
 
-      let lang_config = require(dest);
-      lang_config.service.lang = lang;
-      lang_config.service.host = host;
-      lang_config.service.port = ++port;
+      let config = require(dest);
+      config.service.lang = lang;
+      console.log('lang_server LANG = ' + config.service.lang);
+      config.service.host = host;
+      console.log('lang_server HOST = ' + config.service.host);
+      config.service.port = ++port;
+      console.log('lang_server PORT = ' + config.service.port);
       fs.writeFile(dest, 'module.exports = ' + JSON.stringify(config, null, " "), (err) => {
         if (err) throw err;
         console.log(`config.js for ${lang} language was created`);
       });
 
-      servers_deploy[lang_config.service.lang] = lang_config.service.host + ':' + lang_config.service.port;
+      servers_deploy[config.service.lang] = config.service.host + ':' + config.service.port;
       fs.writeFile(path.join(__dirname, '../servers_deploy.json'), JSON.stringify(servers_deploy, null, " "), (err) => {
         if (err) throw err;
         console.log(`servers_deploy.json for ${lang} was filled`);
