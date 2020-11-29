@@ -3,7 +3,7 @@ module.exports = {
     host: process.env.HOST || "localhost",
     port: process.env.PORT || 4000,
 		mode: process.env.NODE_ENV || "development", // production (heroku NODE_ENV variable) or development
-		languages: ["en", "uk"],
+		languages: ["uk"],
     publicDir: "./.public"
 	},
 
