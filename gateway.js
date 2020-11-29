@@ -32,9 +32,12 @@ function getResponse(accept, obj, res) {
 }
 
 app.get("/version", (req, res) => {
+  console.log('in /version');
+  console.log(servers_deploy);
   var p = [];
   for (let key in servers_deploy){
       const server_address = servers_deploy[key];
+      console.log(server_address);
       let promise = axios.get('http://' + server_address + '/version').then(function (response) { return response.data; }).catch(function (error) {});
       p.push(promise);
   }
